@@ -9,8 +9,57 @@
                 <field name="dock_id" string='Dock'/>
                 <field name="vehicle_id" string='Vehicle' placeholder="Third Party Provider"/>
                 <field name="vehicle_category_id" string='Vehicle Category' placeholder="eg. Semi-truck"/>
-                <field name="batch_weight" string='weight'/>
+                <field name="weight_percentage" string='Weight' widget="progressbar"/>
+                <field name="volume_percentage" string='Volume' widget="progressbar"/>
             </xpath>
+        </field>
+    </record>
+
+   <record id="stock_picking_batch.stock_picking_batch_action" model="ir.actions.act_window">
+        <field name="name">Batch Transfers</field>
+        <field name="res_model">stock.picking.batch</field>
+        <field name="view_mode">tree,kanban,form,graph,gantt</field>
+        <field name="domain">[('is_wave', '=', False)]</field>
+        <field name="context">{'search_default_draft': True, 'search_default_in_progress': True}</field>
+        <field name="search_view_id" ref="stock_picking_batch.stock_picking_batch_filter"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+            Create a new batch transfer
+          </p><p>
+            The goal of the batch transfer is to group operations that may
+            (needs to) be done together in order to increase their efficiency.
+            It may also be useful to assign jobs (one person = one batch) or
+            help the timing management of operations (tasks to be done at 1pm).
+          </p>
+        </field>
+   </record>
+
+    <record id="stock_picking_batch_graph_view" model="ir.ui.view">
+        <field name="name">stock.picking.batch.graph.view"</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="arch" type="xml">
+            <graph string="batch_transfers">
+                <field name="scheduled_date" interval="day"/>
+                <field name="vehicle_category_id"/>
+                <field name="batch_volume" type="measure"/>
+                <field name="batch_weight" type="measure"/>
+                <field name="lines" type="measure"/>
+                <field name="transfers" type="measure"/>
+            </graph>   
+        </field>   
+    </record>
+
+    <record id="stock_picking_batch_gantt_view" model="ir.ui.view">
+        <field name="name">stock.picking.atch.gantt.view</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="arch" type="xml">
+            <gantt
+            date_start="create_date"
+            date_stop="scheduled_date"
+            default_group_by="dock_id,vehicle_id"
+            color="vehicle_id"
+            >
+            </gantt>
         </field>
     </record>
 </odoo>

@@ -11,5 +11,6 @@
         'security/ir.model.access.csv',
         'views/fleet_category.xml',
         'views/batch_transfer.xml',
+        'views/stock_picking_view.xml',
     ]
 }

@@ -1,0 +1,13 @@
+{
+    'name':'stock_transport_settings',
+    'depends':[
+        'base',
+        'stock',
+    ],
+    'installable':True,
+    'application':True,
+    'auto_install':False,
+    'data':[
+        'views/res_config_settings_view.xml',
+    ]
+}
