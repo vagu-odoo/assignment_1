@@ -56,8 +56,9 @@
             <gantt
             date_start="create_date"
             date_stop="scheduled_date"
-            default_group_by="dock_id,vehicle_id"
+            default_group_by="dock_id,vehicle_id,user_id"
             color="vehicle_id"
+            thumbnails="{'user_id':'image_1920'}"
             >
             </gantt>
         </field>

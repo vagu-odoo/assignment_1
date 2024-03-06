@@ -26,19 +26,24 @@ class StockPickingBatch(models.Model):
     @api.depends('move_line_ids')
     def _compute_batch_weight_volume(self):
         for batch in self:
+            batch.batch_weight = 0
+            batch.batch_volume = 0
             for move in batch.move_line_ids:
+                quantity = move.quantity
                 product = move.product_id
                 if product:
                     wt = product.weight
                     vol = product.volume
                     # print("==================",wt)
-                    batch.batch_weight += wt
-                    batch.batch_volume += vol
+                    if quantity:
+                        batch.batch_weight += wt * quantity
+                        batch.batch_volume += vol * quantity
                 else:
                     batch.batch_weight += 0
                     batch.batch_volume +=0
             # print("max vol :",batch.vehicle_category_id.max_volume)
             # print("max wt :",batch.vehicle_category_id.max_weight)
+            # print(batch.batch_weight)
             if batch.vehicle_category_id.max_volume != 0:
                 batch.volume_percentage = (batch.batch_volume/batch.vehicle_category_id.max_volume)*100
             else:
